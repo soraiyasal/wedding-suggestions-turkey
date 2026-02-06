@@ -98,18 +98,11 @@
 
         .scroll-indicator {
             margin-top: 3rem;
-            width: 40px;
-            height: 40px;
+            font-size: 2rem;
             opacity: 0.5;
             animation: bounce 2s infinite;
-            cursor: pointer;
-            transition: opacity 0.3s ease;
-              /* new */
-            background: none;
-            border: none;
-            padding: 0;
+            cursor: url("heart-icon.png") 16 16, pointer;
         }
-
         
         
         .scroll-indicator:hover {
@@ -581,9 +574,8 @@
         
         <p class="cover-message">We can't wait to celebrate with you!! Yakında görüşürüz!</p>
         
-        <button class="scroll-indicator" type="button" onclick="showMainContent()" aria-label="Scroll to main content">
-            <img src="heart-icon.png" alt="">
-        </button>
+        <div class="scroll-indicator" onclick="showMainContent()">↓</div>
+
           
     </div>
 
@@ -1084,7 +1076,7 @@
 
                     <div class="qa-item">
                         <div class="qa-question">Whom should I call with questions?</div>
-                        <div class="qa-answer">Please reach out to our wedding planner - SM Weddings at +918336992293 or write to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f98a968b989080988b908a918c9bb99e94989095d79a9694">[email&#160;protected]</a></div>
+                        <div class="qa-answer">Please reach out to our wedding planner - SM Weddings at +918336992293 or write to soraiyarishub@gmail.com</div>
                     </div>
                 </div>
             </section>
@@ -1097,22 +1089,13 @@
         </footer>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+        <script>
         // Show main content
         function showMainContent() {
-            const cover = document.getElementById('cover');
-            const main  = document.getElementById('mainContent');
-
-            // Match the working file: remove cover first
-            cover.style.display = 'none';
-
-            // Reveal main content
-            main.classList.add('active');
-
-            // Optional: ensure we're at the top of the now-visible main content
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            document.getElementById('cover').style.display = 'none';
+            document.getElementById('mainContent').classList.add('active');
         }
-
 
         // Switch tabs
         function switchTab(tabName) {
@@ -1128,4 +1111,17 @@
             document.getElementById(tabName).classList.add('active');
             
             // Add active class to clicked button
- 
+            event.target.classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Expandable sections
+        function toggleExpand(header) {
+            const expandable = header.parentElement;
+            expandable.classList.toggle('active');
+        }
+    </script>
+</body>
+</html>
