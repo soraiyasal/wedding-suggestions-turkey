@@ -1101,19 +1101,19 @@
         // Show main content
         function showMainContent() {
             const cover = document.getElementById('cover');
-            const main  = document.getElementById('mainContent');
+            const main = document.getElementById('mainContent');
 
-            // Match the working file: remove cover first
-            cover.style.display = 'none';
-
-            // Reveal main content
+            // 1) reveal main content
             main.classList.add('active');
 
-            // Optional: ensure we're at the top of the now-visible main content
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // 2) scroll to it
+            main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // 3) hide cover after the scroll begins (feels intentional)
+            setTimeout(() => {
+            cover.style.display = 'none';
+            }, 350);
         }
-
-
         // Switch tabs
         function switchTab(tabName) {
             // Hide all tab contents
