@@ -6,11 +6,15 @@ Bodrum, Turkey • October 10-12, 2026
 CONTENTS:
 - index.html (your wedding website)
 - favicon.png (star icon for browser tab)
-- 56E15502-F365-4761-9C81-09BCC506D8EF_1_105_c.jpeg (your Istanbul photo)
+- photo1-couple-garden.png (black & white garden photo)
+- photo2-couple-cafe.png (black & white cafe photo)
+- photo3-couple-veil.png (black & white veil photo)
+- photo4-istanbul-bosphorus.jpeg (Istanbul Bosphorus sunset photo)
+- README.txt (this file)
 
-Note: The photo and favicon are already embedded in index.html as base64 data, 
+Note: The photos and favicon are already embedded in index.html as base64 data, 
 so technically you only need index.html to publish the site. The image files 
-are included as backup/reference.
+are included as separate files for your reference and future use.
 
 ===========================================
 
