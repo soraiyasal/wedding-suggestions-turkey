@@ -406,6 +406,66 @@
             opacity: 0.7;
         }
 
+        /* Hotel Cards */
+        .hotel-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hotel-card {
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 6px;
+            padding: 1.75rem;
+            background: rgba(0, 0, 0, 0.015);
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .hotel-card:hover {
+            border-color: rgba(0, 0, 0, 0.22);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+        }
+
+        .hotel-name {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            line-height: 1.4;
+        }
+
+        .hotel-tag {
+            font-size: 0.7rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            opacity: 0.5;
+            margin-bottom: 0.9rem;
+            font-weight: 500;
+        }
+
+        .hotel-desc {
+            font-size: 0.95rem;
+            line-height: 1.7;
+            opacity: 0.85;
+            margin-bottom: 1.1rem;
+        }
+
+        .hotel-link {
+            font-size: 0.8rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            color: #000;
+            text-decoration: none;
+            opacity: 0.55;
+            transition: opacity 0.2s ease;
+            font-weight: 500;
+        }
+
+        .hotel-link:hover {
+            opacity: 1;
+        }
+
         /* Subsection */
         .subsection {
             margin-top: 2rem;
@@ -726,7 +786,7 @@
                     
                     <div class="story-text" style="text-align: center;">
                         <p>All wedding events will take place at Maxx Royal Bodrum Resort, and we've reserved rooms for our guests.</p>
-                        <p style="margin-top: 2rem;">Please contact our wedding planners at soraiyarishub@gmail.com and they'll help you with your room booking.</p>
+                        <p style="margin-top: 2rem;">Please contact our wedding planners at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6b1804190a02120a190218031e092b0c060a020745080406">[email&#160;protected]</a> and they'll help you with your room booking.</p>
                     </div>
 
                     <div class="category" style="margin-top: 4rem; text-align: center;">
@@ -739,8 +799,48 @@
                               Türkiye
                             </a>
                           </p>
-                          
                     </div>
+
+                    <!-- Explore Bodrum Section -->
+                    <div style="margin-top: 4rem; border-top: 1px solid rgba(0,0,0,0.1); padding-top: 4rem;">
+                        <h3 class="schedule-date" style="text-align: center; margin-bottom: 0.5rem;">Want to See Bodrum Before the Wedding?</h3>
+                        <div class="story-text" style="text-align: center; margin-top: 1rem; margin-bottom: 3rem;">
+                            <p>We'd love for you to explore this beautiful part of Türkiye! Here are a few hotels we recommend if you'd like to arrive early and soak it all in. Get in touch with us and we'll help arrange things.</p>
+                        </div>
+
+                        <div class="hotel-grid">
+
+                            <div class="hotel-card">
+                                <div class="hotel-name">DoubleTree by Hilton Bodrum Isil Club</div>
+                                <div class="hotel-tag">All-Inclusive Resort · Torba Bay</div>
+                                <p class="hotel-desc">A beachfront all-inclusive resort on the quiet Torba Bay, about 20 minutes from central Bodrum. Great for families or anyone who wants a fuss-free stay with everything on your doorstep — beach, pools, and sea views.</p>
+                                <a class="hotel-link" href="https://maps.app.goo.gl/QNMqHMoWLtcvesF19" target="_blank" rel="noopener noreferrer">View on Google Maps →</a>
+                            </div>
+
+                            <div class="hotel-card">
+                                <div class="hotel-name">Kuum Hotel & SPA Bodrum</div>
+                                <div class="hotel-tag">Boutique Spa Hotel · Türkbükü</div>
+                                <p class="hotel-desc">A stylish spa retreat on the shores of Türkbükü, one of the most sought-after bays on the peninsula. Spacious rooms, a beautiful beach, and a superb breakfast make this a wonderful base for exploring.</p>
+                                <a class="hotel-link" href="https://maps.app.goo.gl/MT4G2V4PJWtTwxq77" target="_blank" rel="noopener noreferrer">View on Google Maps →</a>
+                            </div>
+
+                            <div class="hotel-card">
+                                <div class="hotel-name">The Bodrum EDITION</div>
+                                <div class="hotel-tag">Luxury Resort · Dirmil</div>
+                                <p class="hotel-desc">Stunningly designed and set directly on the Aegean, The Bodrum EDITION is a world-class property with Michelin-starred dining, a renowned spa, and some of the most breathtaking sea views on the peninsula.</p>
+                                <a class="hotel-link" href="https://maps.app.goo.gl/izjcAEnrBgwojdq59" target="_blank" rel="noopener noreferrer">View on Google Maps →</a>
+                            </div>
+
+                            <div class="hotel-card">
+                                <div class="hotel-name">OKU Bodrum</div>
+                                <div class="hotel-tag">Adults-Only Boutique Hotel · Göltürkbükü</div>
+                                <p class="hotel-desc">A cliffside sanctuary for adults only, OKU Bodrum opened in 2025 with just 58 ocean-facing rooms and suites — many with private pools. Three restaurants, a spa, and a private jetty make this a beautifully intimate escape.</p>
+                                <a class="hotel-link" href="https://maps.app.goo.gl/N8Sb1ZJhsnvo6uBX7" target="_blank" rel="noopener noreferrer">View on Google Maps →</a>
+                            </div>
+
+                        </div>
+                    </div>
+
                 </div>
             </section>
         </div>
@@ -1087,7 +1187,7 @@
 
                     <div class="qa-item">
                         <div class="qa-question">Whom should I call with questions?</div>
-                        <div class="qa-answer">Please reach out to our wedding planner - SM Weddings at +918336992293 or write to soraiyarishub@gmail.com</div>
+                        <div class="qa-answer">Please reach out to our wedding planner - SM Weddings at +918336992293 or write to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="40332f322129392132293328352200272d21292c6e232f2d">[email&#160;protected]</a></div>
                     </div>
                 </div>
             </section>
