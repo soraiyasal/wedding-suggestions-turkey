@@ -180,6 +180,11 @@
             outline-offset: 4px;
         }
 
+        /* Hamburger button — hidden on desktop */
+        .hamburger {
+            display: none;
+        }
+
         /* Tab Content */
         .tab-content {
             display: none;
@@ -591,28 +596,77 @@
                 max-width: 400px;
             }
 
-            .tabs-nav {
-                padding: 0 1rem;
+            /* Show hamburger button */
+            .hamburger {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                padding: 0.85rem 0;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-family: inherit;
             }
 
+            .hamburger-label {
+                font-size: 0.75rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                font-weight: 500;
+            }
+
+            .hamburger-icon {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                width: 22px;
+            }
+
+            .hamburger-icon span {
+                display: block;
+                height: 1.5px;
+                background: #000;
+                transition: transform 0.25s ease, opacity 0.25s ease;
+                transform-origin: center;
+            }
+
+            /* Animate to X when open */
+            .tabs-nav.open .hamburger-icon span:nth-child(1) {
+                transform: translateY(6.5px) rotate(45deg);
+            }
+            .tabs-nav.open .hamburger-icon span:nth-child(2) {
+                opacity: 0;
+            }
+            .tabs-nav.open .hamburger-icon span:nth-child(3) {
+                transform: translateY(-6.5px) rotate(-45deg);
+            }
+
+            /* Dropdown list */
             .tabs-list {
-                flex-wrap: nowrap;
-                overflow-x: auto;
-                justify-content: flex-start;
-                -webkit-overflow-scrolling: touch;
-                scrollbar-width: none;
-                -webkit-mask-image: linear-gradient(to right, transparent 0, black 1rem, black calc(100% - 1rem), transparent 100%);
-                mask-image: linear-gradient(to right, transparent 0, black 1rem, black calc(100% - 1rem), transparent 100%);
+                display: none;
+                flex-direction: column;
+                border-top: 1px solid rgba(0,0,0,0.08);
+                padding: 0.5rem 0;
             }
 
-            .tabs-list::-webkit-scrollbar {
-                display: none;
+            .tabs-nav.open .tabs-list {
+                display: flex;
             }
 
             .tab-button {
-                font-size: 0.75rem;
-                padding: 1rem 0.7rem;
+                border-bottom: none;
+                border-left: 2px solid transparent;
+                padding: 0.85rem 0.5rem;
+                font-size: 0.85rem;
+                text-align: left;
+                width: 100%;
                 min-height: 48px;
+            }
+
+            .tab-button.active {
+                border-left-color: #000;
+                border-bottom-color: transparent;
             }
 
             section {
@@ -664,7 +718,13 @@
 
     <!-- Main Content with Tabs -->
     <div class="main-content" id="mainContent">
-        <nav class="tabs-nav">
+        <nav class="tabs-nav" id="tabsNav">
+            <button class="hamburger" onclick="toggleMenu(this)" aria-label="Open navigation menu" aria-expanded="false">
+                <span class="hamburger-label" id="hamburgerLabel">Menu</span>
+                <span class="hamburger-icon" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </span>
+            </button>
             <ul class="tabs-list">
                 <li><button class="tab-button active" onclick="switchTab('story')">Story</button></li>
                 <li><button class="tab-button" onclick="switchTab('schedule')">Schedule</button></li>
@@ -809,7 +869,7 @@
                     
                     <div class="story-text" style="text-align: center;">
                         <p>All wedding events will take place at Maxx Royal Bodrum Resort, and we've reserved rooms for our guests.</p>
-                        <p style="margin-top: 2rem;">Please contact our wedding planners at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f88b978a999181998a918b908d9ab89f95999194d69b9795">[email&#160;protected]</a> and they'll help you with your room booking.</p>
+                        <p style="margin-top: 2rem;">Please contact our wedding planners at soraiyarishub@gmail.com and they'll help you with your room booking.</p>
                     </div>
 
                     <div class="category" style="margin-top: 4rem; text-align: center;">
@@ -1180,7 +1240,8 @@
 
                     <div class="qa-item">
                         <div class="qa-question">What should I wear?</div>
-                        <div class="qa-answer">We've put together a full outfit guide for every event — colours, styles and inspiration.See the oufits page.</div>
+
+                        <div class="qa-answer">We've put together a full outfit guide for every event — colours, styles and inspiration. <a href="/outfits">See the dress code page →</a></div>
                     </div>
 
                     <div class="qa-item">
@@ -1210,7 +1271,7 @@
 
                     <div class="qa-item">
                         <div class="qa-question">Whom should I call with questions?</div>
-                        <div class="qa-answer">Please reach out to our wedding planner - SM Weddings at +918336992293 or write to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c6f736e7d75657d6e756f74697e5c7b717d7570327f7371">[email&#160;protected]</a></div>
+                        <div class="qa-answer">Please reach out to our wedding planner - SM Weddings at +918336992293 or write to soraiyarishub@gmail.com</div>
 
                 </div>
             </section>
@@ -1249,6 +1310,13 @@
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
         <script>
+        // Toggle hamburger menu
+        function toggleMenu(btn) {
+            const nav = document.getElementById('tabsNav');
+            const isOpen = nav.classList.toggle('open');
+            btn.setAttribute('aria-expanded', isOpen);
+        }
+
         // Show main content
         function showMainContent() {
             document.getElementById('cover').style.display = 'none';
@@ -1268,10 +1336,15 @@
             // Show selected tab
             document.getElementById(tabName).classList.add('active');
             
-            // Add active class to clicked button and scroll it into view
+            // Mark the clicked button as active
             const activeBtn = event.currentTarget;
             activeBtn.classList.add('active');
-            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+
+            // Update hamburger label to current tab name and close menu
+            const nav = document.getElementById('tabsNav');
+            document.getElementById('hamburgerLabel').textContent = activeBtn.textContent;
+            nav.classList.remove('open');
+            document.querySelector('.hamburger').setAttribute('aria-expanded', 'false');
         }
         </script>
 </body>
