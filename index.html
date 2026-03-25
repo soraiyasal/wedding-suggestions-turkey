@@ -136,7 +136,7 @@
             top: 0;
             background: rgba(251, 255, 239, 0.95);
             border-bottom: 1px solid rgba(0, 0, 0, 0.15);
-            padding: 1rem 1.5rem;
+            padding: 0 1.5rem;
             z-index: 100;
             backdrop-filter: blur(8px);
         }
@@ -145,28 +145,34 @@
             list-style: none;
             display: flex;
             justify-content: center;
-            gap: 1.5rem;
+            gap: 0;
             flex-wrap: wrap;
         }
 
         .tab-button {
             background: none;
             border: none;
+            border-bottom: 2px solid transparent;
             font-size: 0.75rem;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: #000000;
-            opacity: 0.6;
-            transition: opacity 0.2s ease;
-            font-weight: 400;
+            opacity: 0.5;
+            transition: opacity 0.2s ease, border-color 0.2s ease;
+            font-weight: 500;
             cursor: pointer;
-            padding: 0.5rem 0;
+            padding: 1rem 0.85rem;
             font-family: inherit;
+            white-space: nowrap;
         }
 
-        .tab-button:hover,
+        .tab-button:hover {
+            opacity: 0.8;
+        }
+
         .tab-button.active {
             opacity: 1;
+            border-bottom-color: #000000;
         }
 
         .tab-button:focus {
@@ -585,12 +591,28 @@
                 max-width: 400px;
             }
 
+            .tabs-nav {
+                padding: 0 1rem;
+            }
+
             .tabs-list {
-                gap: 1rem;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                justify-content: flex-start;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -webkit-mask-image: linear-gradient(to right, transparent 0, black 1rem, black calc(100% - 1rem), transparent 100%);
+                mask-image: linear-gradient(to right, transparent 0, black 1rem, black calc(100% - 1rem), transparent 100%);
+            }
+
+            .tabs-list::-webkit-scrollbar {
+                display: none;
             }
 
             .tab-button {
-                font-size: 0.7rem;
+                font-size: 0.75rem;
+                padding: 1rem 0.7rem;
+                min-height: 48px;
             }
 
             section {
@@ -787,7 +809,7 @@
                     
                     <div class="story-text" style="text-align: center;">
                         <p>All wedding events will take place at Maxx Royal Bodrum Resort, and we've reserved rooms for our guests.</p>
-                        <p style="margin-top: 2rem;">Please contact our wedding planners at soraiyarishub@gmail.com and they'll help you with your room booking.</p>
+                        <p style="margin-top: 2rem;">Please contact our wedding planners at <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f88b978a999181998a918b908d9ab89f95999194d69b9795">[email&#160;protected]</a> and they'll help you with your room booking.</p>
                     </div>
 
                     <div class="category" style="margin-top: 4rem; text-align: center;">
@@ -1158,8 +1180,7 @@
 
                     <div class="qa-item">
                         <div class="qa-question">What should I wear?</div>
-                        <div class="qa-answer">We've put together a full outfit guide for every event — colours, styles and inspiration. <a href="/outfits">See the dress code page →</a>/div>
-                    </div>
+                        <div class="qa-answer">We've put together a full outfit guide for every event — colours, styles and inspiration. <a href="/outfits">See the dress code page →</a></div>
                     </div>
 
                     <div class="qa-item">
@@ -1189,7 +1210,7 @@
 
                     <div class="qa-item">
                         <div class="qa-question">Whom should I call with questions?</div>
-                        <div class="qa-answer">Please reach out to our wedding planner - SM Weddings at +918336992293 or write to soraiyarishub@gmail.com</div>
+                        <div class="qa-answer">Please reach out to our wedding planner - SM Weddings at +918336992293 or write to <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1c6f736e7d75657d6e756f74697e5c7b717d7570327f7371">[email&#160;protected]</a></div>
 
                 </div>
             </section>
@@ -1226,7 +1247,7 @@
         </footer>
     </div>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
         <script>
         // Show main content
         function showMainContent() {
@@ -1247,18 +1268,11 @@
             // Show selected tab
             document.getElementById(tabName).classList.add('active');
             
-            // Add active class to clicked button
-            event.target.classList.add('active');
-            
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Add active class to clicked button and scroll it into view
+            const activeBtn = event.currentTarget;
+            activeBtn.classList.add('active');
+            activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
         }
-
-        // Expandable sections
-        function toggleExpand(header) {
-            const expandable = header.parentElement;
-            expandable.classList.toggle('active');
-        }
-    </script>
+        </script>
 </body>
 </html>
