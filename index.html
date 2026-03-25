@@ -1240,8 +1240,9 @@
 
                     <div class="qa-item">
                         <div class="qa-question">What should I wear?</div>
-
+                        <div class="qa-answer">We'll share the wardrobe guidance closer to the time. But you're all beautiful and fabulous — can't wait to see what you wear!</div>
                         <div class="qa-answer">We've put together a full outfit guide for every event — colours, styles and inspiration. <a href="/outfits">See the dress code page →</a></div>
+                    </div>
                     </div>
 
                     <div class="qa-item">
@@ -1310,6 +1311,12 @@
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
         <script>
+        // Toggle expandable sections
+        function toggleExpand(header) {
+            const expandable = header.closest('.expandable');
+            expandable.classList.toggle('active');
+        }
+
         // Toggle hamburger menu
         function toggleMenu(btn) {
             const nav = document.getElementById('tabsNav');
