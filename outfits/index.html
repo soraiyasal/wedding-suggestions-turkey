@@ -328,6 +328,26 @@
             line-height: 1.6;
         }
 
+        .hero-gif-wrap {
+        margin: 2rem auto 0;
+        width: fit-content;
+    }
+        .hero-gif {
+            display: block;
+            max-width: 260px;
+            width: 100%;
+            border-radius: 2px;
+            padding: 10px 10px 36px;
+            background: #fff;
+            box-shadow: 0 6px 32px rgba(0,0,0,0.13), 0 1px 4px rgba(0,0,0,0.07);
+            transform: rotate(-1.5deg);
+            animation: gif-float 4s ease-in-out infinite;
+        }
+        @keyframes gif-float {
+            0%, 100% { transform: rotate(-1.5deg) translateY(0); }
+            50%       { transform: rotate(-1.5deg) translateY(-7px); }
+        }
+
         /* ══════════════════════════════
            MOBILE — max 640px
         ══════════════════════════════ */
@@ -380,10 +400,9 @@
         <p class="hero-eyebrow">Soraiya &amp; Rishub · Bodrum 2026</p>
         <h1 class="hero-title">What to Wear</h1>
         <p class="hero-sub">Pick a celebration below for the full dress code, colour palette and outfit ideas.</p>
-        <div class="moodboard-wrap">
-            <img src="supermodel.gif" alt="ru paul" class="moodboard-img" onerror="this.style.display='none'">
+        <div class="hero-gif-wrap">
+            <img src="supermodel.gif" alt="ru paul" class="hero-gif" onerror="this.style.display='none'">
         </div>
-
     </div>
 
 
