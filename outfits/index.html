@@ -769,20 +769,26 @@
 
         // Swipe left/right between event panels
         let touchStartX = 0;
+        let touchStartY = 0;
         const panels = ['mehendi', 'sangeet', 'hindu', 'nikkah'];
-
+        
         document.addEventListener('touchstart', e => {
             touchStartX = e.changedTouches[0].clientX;
+            touchStartY = e.changedTouches[0].clientY;
         }, { passive: true });
-
+        
         document.addEventListener('touchend', e => {
             const dx = e.changedTouches[0].clientX - touchStartX;
-            if (Math.abs(dx) < 60) return; // ignore small swipes
-
+            const dy = e.changedTouches[0].clientY - touchStartY;
+        
+            // Ignore if not clearly horizontal (vertical scroll protection)
+            if (Math.abs(dx) < 60) return;
+            if (Math.abs(dy) > Math.abs(dx) * 0.6) return; // too vertical
+        
             const activeBtn = document.querySelector('.event-btn.active');
             const btns = Array.from(document.querySelectorAll('.event-btn'));
             const idx = btns.indexOf(activeBtn);
-
+        
             if (dx < 0 && idx < panels.length - 1) {
                 showEvent(panels[idx + 1], btns[idx + 1]);
             } else if (dx > 0 && idx > 0) {
