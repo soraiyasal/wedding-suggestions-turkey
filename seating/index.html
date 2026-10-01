@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Find Your Seat • S & R</title>
+<meta name="description" content="Find your table for Soraiya and Rishub's wedding in Bodrum.">
+<meta name="theme-color" content="#fbffef">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fbffef;
+    --ink: #000000;
+    --heart: #ff4f3b;
+    --line: rgba(0,0,0,0.15);
+    --soft: rgba(0,0,0,0.03);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif;
+    background: var(--cream);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  .wrap {
+    max-width: 520px;
+    margin: 0 auto;
+    padding: max(2.5rem, env(safe-area-inset-top)) 1rem 3rem;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
+  }
+  header { text-align: center; margin-bottom: 2rem; }
+  .names {
+    font-family: 'VT323', monospace;
+    font-size: clamp(3.5rem, 18vw, 5.5rem);
+    line-height: 1;
+    letter-spacing: 0.02em;
+  }
+  .kicker {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    font-weight: 500;
+    margin-top: 0.75rem;
+  }
+  h1.title {
+    font-family: 'VT323', monospace;
+    font-weight: 400;
+    font-size: clamp(2.2rem, 10vw, 3rem);
+    line-height: 1;
+    margin-top: 1.75rem;
+  }
+  .sub { opacity: 0.7; margin-top: 0.5rem; font-size: 0.98rem; }
+
+  .search {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    background: var(--cream);
+    padding: 0.5rem 0 0.75rem;
+  }
+  .field {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    border: 2px solid var(--ink);
+    background: #fff;
+    padding: 0 0.9rem;
+    height: 56px;
+  }
+  .field svg { flex: none; width: 20px; height: 20px; }
+  .field input {
+    flex: 1;
+    min-width: 0;
+    border: 0;
+    outline: 0;
+    background: transparent;
+    font: inherit;
+    font-size: 18px; /* ≥16px stops iOS zooming */
+    color: var(--ink);
+  }
+  .field input::-webkit-search-cancel-button, .field input::-webkit-search-decoration { -webkit-appearance: none; appearance: none; }
+  .field input::placeholder { color: rgba(0,0,0,0.4); }
+  .clear {
+    border: 0; background: none; cursor: pointer;
+    font-family: 'VT323', monospace; font-size: 1.6rem; line-height: 1;
+    padding: 0.25rem 0.35rem; color: var(--ink); opacity: 0.6;
+  }
+  .clear[hidden] { display: none; }
+  .field:focus-within { box-shadow: 4px 4px 0 var(--heart); }
+
+  .results { list-style: none; margin-top: 0.25rem; }
+  .result {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    text-align: left;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 1rem 0.25rem;
+    font: inherit;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .result:active { background: var(--soft); }
+  .result .nm { font-size: 1.08rem; }
+  .result .nm mark { background: none; color: inherit; font-weight: 700; }
+  .result .tb {
+    font-family: 'VT323', monospace;
+    font-size: 1.6rem;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .msg {
+    text-align: center;
+    padding: 2rem 0.5rem;
+    opacity: 0.75;
+  }
+  .msg strong { font-weight: 600; }
+
+  /* Seat card */
+  .card {
+    text-align: center;
+    padding: 1rem 0 0.5rem;
+    animation: pop .35s ease-out;
+  }
+  @keyframes pop { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .card { animation: none; } }
+  .card .hello { font-size: 1.05rem; opacity: 0.8; }
+  .card .guest {
+    font-family: 'VT323', monospace;
+    font-size: clamp(2.2rem, 11vw, 3.2rem);
+    line-height: 1.05;
+    margin-top: 0.25rem;
+    overflow-wrap: anywhere;
+  }
+  .heart {
+    position: relative;
+    width: min(78vw, 340px);
+    margin: 1.5rem auto 1rem;
+    aspect-ratio: 7 / 6;
+  }
+  .heart svg { width: 100%; height: 100%; display: block; }
+  .heart .label {
+    position: absolute;
+    left: 0; right: 0;
+    top: 16%;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'VT323', monospace;
+    color: var(--ink);
+    line-height: 0.9;
+    padding: 0 16%;
+  }
+  .heart .label small {
+    font-size: clamp(1.1rem, 5.5vw, 1.6rem);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .heart .label span {
+    font-size: clamp(4.5rem, 26vw, 7.5rem);
+    overflow-wrap: anywhere;
+  }
+  .heart .label span.long { font-size: clamp(2rem, 10vw, 3rem); line-height: 1; }
+  .tname { font-size: 1.05rem; margin: -0.25rem auto 0.5rem; max-width: 22rem; opacity: 0.85; }
+  .heart .label span.soon { font-size: clamp(1.7rem, 8vw, 2.4rem); }
+  .mates {
+    margin-top: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .mates h2 {
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.55;
+    font-weight: 500;
+    margin-bottom: 0.6rem;
+  }
+  .mates p { font-size: 1rem; line-height: 1.7; }
+  .back {
+    margin-top: 1.75rem;
+    background: var(--ink);
+    color: var(--cream);
+    border: 0;
+    font-family: 'VT323', monospace;
+    font-size: 1.5rem;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+  }
+  .back:active { transform: translate(2px, 2px); }
+
+  footer {
+    margin-top: auto;
+    padding-top: 3rem;
+    text-align: center;
+    font-family: 'VT323', monospace;
+    font-size: 1.4rem;
+    opacity: 0.8;
+  }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="names">S &amp; R</div>
+    <div class="kicker">Bodrum · October 2026</div>
+    <h1 class="title">Find your seat</h1>
+    <p class="sub" id="sub">Type your first or last name below.</p>
+  </header>
+
+  <div class="search" id="searchBar">
+    <label class="field">
+      <svg viewBox="0 0 10 10" shape-rendering="crispEdges" aria-hidden="true"><path d="M2 0h4v1H2zM1 1h1v1H1zM6 1h1v1H6zM0 2h1v3H0zM7 2h1v3H7zM1 5h1v1H1zM6 5h1v1H6zM2 6h4v1H2zM7 6h1v1H7zM8 7h1v1H8zM9 8h1v2H9zM8 9h1v1H8z"/></svg>
+      <span class="sr">Search your name</span>
+      <input id="q" type="search" placeholder="e.g. Rishub or Keelara" autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false" enterkeyhint="search">
+      <button class="clear" id="clear" type="button" aria-label="Clear search" hidden>×</button>
+    </label>
+  </div>
+
+  <main id="out" aria-live="polite"></main>
+
+  <footer>We can't wait to celebrate with you ♥</footer>
+</div>
+
+<script type="text/csv" id="guestData">
+First Name,Last Name,Table Number ,Table Name
+Yasmina,Abou Jaoude ,,
+Safina,Adatia  ,,
+Nadia,Adatia  ,,
+Zahra,Ahmed  ,,
+Temur,Ahmed  ,,
+Shamshad,Ahmed  ,,
+Fehmina,Ahmed  ,,
+Kahina,Ait Ouazzou ,,
+Sonia,Amjad  ,,
+Andreas,Andreou  ,,
+Sondra,Anton  ,,
+Natasha,Ashby  ,,
+Soraya,Badouraly  ,,
+Navroz,Badrudin  ,,
+Mahmood,Badrudin  ,,
+Leila,Bamba  ,,
+Bijan,Banwait  ,,
+Shivani,Bhatnagar  ,,
+Shannon,Caron de Waal,,
+Annabel,Chammas  ,,
+Neesha,Chhina  ,,
+Just,de Waal ,,
+Mehboob,Dhanji  ,,
+Yasmin,Dhanji  ,,
+Almoonir,Dhanji  ,,
+Karima,Dhanji  ,,
+Yasmin,Dossa  ,,
+Nazir,Dossa  ,,
+Kelsey,Dunwoodie  ,,
+Daniel,Dunwoodie  ,,
+Isabelle,Dupraz  ,,
+Evelina,Gabrielyants  ,,
+Ethan,Gaudry-Gardner  ,,
+Gabriel,Geraci  ,,
+Cyrus,Ghanadian  ,,
+Cindy,Gill  ,,
+Giuseppe,Guerreri  ,,
+Riyaz,Gulamani  ,,
+Gulnora,Gurzhieva  ,,
+Khanam,Hajee  ,,
+Ahmed,Hassan  ,,
+Aliyana,Hirji  ,,
+Nadeem,Hirji  ,,
+Saira,Hirji  ,,
+Altaf,Hirji  ,,
+Nimet,Hirji  ,,
+Julian,Hoffmann Anton ,,
+Alykhan,Hudani  ,,
+Deeama,Hudani  ,,
+Al-Karim,Jaffer  ,,
+Nadia,Jassar  ,,
+Nivraj,Jassar  ,,
+Ashiff,Jivraj  ,,
+Nargis,Jivraj  ,,
+Richard,Jolin  ,,
+Zayn,Kalyan  ,,
+Oksana,Kapustina ,,
+Hasan,Karim  ,,
+Aly,Karmali  ,,
+Nayna,Karmali  ,,
+Natasha,Kassam  ,,
+Mumtaz,Kassam  ,,
+Alnasir,Kassam  ,,
+Zarak,Khan  ,,
+Farhat,Khan  ,,
+Amyn,Khan  ,,
+Alshamsha,Khan  ,,
+Eric,Khanfo  ,,
+Deeya,Khemlani  ,,
+Krish,Kishinani  ,,
+Raju,Kishinani  ,,
+Raju,Kishinani  ,,
+Bina,Kishinani  ,,
+Saloni,Kishinani-Majeethia  ,,
+Andrew,Kwok  ,,
+Wilson,Kwong  ,,
+Noorez,Lalani  ,,
+Sue,Lalani  ,,
+Alykhan,Lalani  ,,
+Rahim,Lalji  ,,
+Moyez,Lallani  ,,
+Michelle,Liao  ,,
+Jack,MacPhail  ,,
+Hemang,Majeethia  ,,
+Fareed,Mangalji  ,,
+Lorena,Mangalji  ,,
+Ashak,Manji  ,,
+Shelina,Manji  ,,
+Imran,Manji  ,,
+Faizan,Manji  ,,
+Zahra,Masters  ,,
+Zulf,Masters  ,,
+Zabeen,Masters  ,,
+Elena,Mate  ,,
+Cristian,Miselem  ,,
+Santosh,Mishra  ,,
+Natalya,Modisett  ,,
+Jeffrey,Modisett  ,,
+Roshani,Moorjani  ,,
+Stephanie,Morrongiello  ,,
+Sasan,Munro  ,,
+Sahinaz,Nasser  ,,
+Laila,Nimji  ,,
+Faheem,Noorani  ,,
+Renata,Noorani  ,,
+Ashley,Oberer Munro ,,
+Victoria,Ong  ,,
+Lucie,Palkoskova  ,,
+Dorothy,Pang  ,,
+Ajay,Patel  ,,
+Punam,Patel  ,,
+Kirubin,Pillay  ,,
+Alniz,Popat  ,,
+Nausheen,Popat  ,,
+Arti,Popat-Shah  ,,
+Riaz,Punja  ,,
+Zahoor,Rahimtoola  ,,
+Mehak,Rahimtoola  ,,
+Ammaarah,Sachedina  ,,
+Alina,Salemohamed  ,,
+Karim,Salemohamed  ,,
+Soraiya,Salemohamed  ,,
+Amin,Salemohamed  ,,
+Omar,Salemohamed  ,,
+Munir,Samji  ,,
+Ferah,Samji  ,,
+Sharan,Shah  ,,
+Hiren,Shah  ,,
+Bansi,Shah  ,,
+Samir,Shah  ,,
+Neeta,Shah  ,,
+Dipak,Shah  ,,
+Shruti,Shah  ,,
+Shafina,Shaikh  ,,
+Aezaz,Shaikh  ,,
+Danial,Shamail  ,,
+Yasmin,Shariff  ,,
+Santosh,Sharma  ,,
+Saroj,Sharma  ,,
+Ryan,Singh  ,,
+Karl,Sohi  ,,
+Stephanie,Spatalou  ,,
+Balamohan,Subramaniam  ,,
+Shonil,Sumaria  ,,
+Keyu,Sumaria  ,,
+Romi,Sumaria  ,,
+Andrea,Sumaria  ,,
+Jennifer,Sutton Sumaria ,,
+Puneet,Tandon  ,,
+Shafali,Tandon  ,,
+Michel,Tang  ,,
+Iqbal,Tarmohamed  ,,
+Susan,Tarmohamed  ,,
+Alnoor,Tarmohamed  ,,
+Aamir,Tayeb  ,,
+Sanaya,Tayeb  ,,
+Taher,Tayeb  ,,
+Samina,Tayeb  ,,
+Theo,Theodoulou  ,,
+Davina,Tijani  ,,
+Humza,Turab  ,,
+Freddie,Twist  ,,
+Idy,Udo  ,,
+Daniela,Uribe  ,,
+Khatidja,Vaiya  ,,
+Zainul,Vaiya  ,,
+Julie,Vaiya  ,,
+Karim,Valimohamed  ,,
+Alyssa,Virani  ,,
+Natasha,Virani  ,,
+Karim,Virani  ,,
+Monica,Virani  ,,
+Zulfikarali,Virani  ,,
+Sunny,Vohra  ,,
+Daria,Volevskaia  ,,
+Naeem,Walji  ,,
+Gwen,Webster  ,,
+Dale,Williams  ,,
+Wanda,Wong  ,,
+Sarah,Wyndels  ,,
+Brent,Wyndels  ,,
+Beverly,Yhap  ,,
+Dorukcan,Yolacan  ,,
+Yenny,You  ,,
+Aashish,Chalasani  ,,
+Sheila,Kaushik  ,,
+Ted,Staley  ,,
+Chloe,Ferris  ,,
+Michael,Davidson  ,,
+Abbie,Davidson  ,,
+Brice,Shultz  ,,
+Rae,Cavano  ,,
+Patrick,Beecher  ,,
+Heather,Bartels  ,,
+Hunter,Weiss  ,,
+Andrea,Lorico  ,,
+Tim,Muse  ,,
+Dilipan,Sundaramoorthy  ,,
+Abineash,Barathan  ,,
+Megan,Mccluskey  ,,
+Julien,Picard  ,,
+Kartik,Bhandari  ,,
+Shitij,Gugnani  ,,
+Omar,Farouk  ,,
+Natalie,Hussain  ,,
+Natalie,Razak  ,,
+Elias,Razak  ,,
+Seán,Metcalfe  ,,
+Nastassia,Rüscher-Metcalfe  ,,
+Tim,Zha  ,,
+Quaz,Qureshi  ,,
+Jessie,McKelvey  ,,
+Miguel,McKelvey  ,,
+Alexa,Segal  ,,
+Clara,Greiner  ,,
+Suzannah,Chapman  ,,
+Patrick,Cunningham  ,,
+Joey,Fitzsimmons  ,,
+Adam,Blazer  ,,
+Ramesh,Thimmaiah  ,,
+Susheela,Ramesh  ,,
+Harsha,Ramesh  ,,
+Ankita,Naik  ,,
+Naj,Srinivas  ,,
+Taryn,Hoppe  ,,
+Satyanarayana,Tanguturi  ,,
+Kusuma,Tanguturi  ,,
+Fayeza,Mullamithawala  ,,
+Jay,Singonahalli  ,,
+Hemalatha,Devaraj  ,,
+Vibha,Devaraj  ,,
+Kala,Prakash  ,,
+Siddharth,Chandraprakash  ,,
+Pushpa,Mahesh  ,,
+Vishwanath,Mahesh  ,,
+Dhanush,Mahesh  ,,
+Shivamma,Bajjegowda  ,,
+Mamatha,Thimmaiah  ,,
+Jayaram,Giriyappa  ,,
+Gunavathi,Thimmaiah  ,,
+Monisha,Rajashekhar  ,,
+Anusuya,Krishnamurthy  ,,
+Tejashree,Krishnamurthy  ,,
+Krishnamurthy,Kempagulaiah  ,,
+Shreyas,Jayaram  ,,
+Pooja,Rayappa  ,,
+Yashas,Jayaram  ,,
+Tanisha,Rajashekhar  ,,
+Savitha,Parthasarathy  ,,
+Ramu,Parthasarathy  ,,
+Preetesh,Kantak  ,,
+Niam,Kantak  ,,
+Arya,Kantak  ,,
+Kavita,Kantak  ,,
+Sunanda,Thammaiah  ,,
+Charitha,Shanmugha  ,,
+Nagapushpa,Maribettaiah  ,,
+Manjunath,Sonnenhalli  ,,
+Kalpana,Bagamane  ,,
+Sudha,Pai  ,,
+Vasantha,Pai  ,,
+Jamuna,Chalasani  ,,
+Ajay,Chalasani  ,,
+Surekha,Raju  ,,
+Niranjan,Raju  ,,
+Baskar,Subbarao  ,,
+Shubha,Subbarao  ,,
+Madhuri,Gururaj  ,,
+Nagarajan,Gururaj  ,,
+Anil,Muddasani  ,,
+Padmini,Muddasani  ,,
+Sree,Narra  ,,
+Vamsi,Narra  ,,
+Shailaja,Pulisetty  ,,
+Lakshmi,Reddy  ,,
+Srinivas,Reddy  ,,
+Anupa,Venkatesh  ,,
+Ramakrishna,Venkatesh  ,,
+Shoba,Shekar  ,,
+Prashanth,Shekar  ,,
+Kavita,Ramakrishnan  ,,
+Pradeep,Ramakrishnan  ,,
+Tejaswini,Nayak  ,,
+Ravi,Nayak  ,,
+Veena,Kunigal  ,,
+Jyothi,Kudva  ,,
+Venkata,Nagireddi  ,,
+Vijaya,Nagireddi  ,,
+Naveen,Krishna  ,,
+Lakshmi,Naveen  ,,
+Arna,Naveen  ,,
+Aryan,Naveen  ,,
+Ananda,Reddy  ,,
+Sudha,Reddy  ,,
+Uma,Nagabhushan  ,,
+Padmaja,Suresh  ,,
+Suresh,Krishnamoorthy  ,,
+Agara,Reddy  ,,
+Shobha,Gowda  ,,
+Bhaskar,Gowda  ,,
+Tarikere,Kumar  ,,
+Hari,Babu  ,,
+Shobha,Babu  ,,
+Jayanthi,Balakrishnan  ,,
+Patricia,Halpin  ,,
+Timothy,Fleury  ,,
+Navin,Channegowda  ,,
+Kamakshi,Gopal  ,,
+Ram,Gopal  ,,
+Rishub,Keelara  ,,
+Chaya,Keelara  ,,
+Gopalan,Keelara  ,,
+Varsha,Tanguturi  ,,
+Shyam,Tanguturi  ,,
+Amiya,Tanguturi  ,,
+Siyona,Tanguturi  ,,
+Ellora,Tanguturi  ,,
+</script>
+<script>
+(function () {
+  var guests = [];
+  var q = document.getElementById('q');
+  var out = document.getElementById('out');
+  var clearBtn = document.getElementById('clear');
+  var searchBar = document.getElementById('searchBar');
+
+  // ---------- CSV ----------
+  function parseCSV(text) {
+    var rows = [], row = [], cell = '', inQ = false;
+    text = text.replace(/^﻿/, '');
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (inQ) {
+        if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else inQ = false; }
+        else cell += c;
+      } else if (c === '"') inQ = true;
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(cell); rows.push(row); row = []; cell = '';
+      } else cell += c;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows.filter(function (r) { return r.some(function (x) { return x.trim() !== ''; }); });
+  }
+
+  function norm(s) {
+    return (s || '').toLocaleLowerCase('en')
+      .replace(/ı/g, 'i').replace(/ß/g, 'ss').replace(/ø/g, 'o').replace(/æ/g, 'ae')
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[’'`.\-]/g, '').replace(/\s+/g, ' ').trim();
+  }
+
+  function load(text) {
+    var rows = parseCSV(text);
+    if (!rows.length) return [];
+    var head = rows[0].map(function (h) { return norm(h).replace(/[^a-z]/g, ''); });
+    function col(names) { for (var i = 0; i < head.length; i++) if (names.indexOf(head[i]) > -1) return i; return -1; }
+    var fi = col(['firstname', 'first', 'forename', 'givenname']);
+    var li = col(['lastname', 'last', 'surname', 'familyname']);
+    var ni = col(['name', 'fullname', 'guest', 'guestname']);
+    var ti = col(['tablenumber', 'tableno', 'table', 'seat', 'seating']);
+    var tni = col(['tablename']);
+    function clean(s) { return (s || '').replace(/\s+/g, ' ').trim(); }
+    return rows.slice(1).map(function (r) {
+      var first = fi > -1 ? clean(r[fi]) : '';
+      var last = li > -1 ? clean(r[li]) : '';
+      var full = ni > -1 ? clean(r[ni]) : (first + ' ' + last).trim();
+      var num = ti > -1 ? clean(r[ti]).replace(/\.0+$/, '') : '';
+      var tname = tni > -1 ? clean(r[tni]) : '';
+      return { name: full, table: num, tableName: tname, tid: num + '|' + tname, key: norm(full) };
+    }).filter(function (g) { return g.name; });
+  }
+
+  // ---------- Search ----------
+  function search(term) {
+    var t = norm(term);
+    if (!t) return [];
+    var words = t.split(' ');
+    var scored = [];
+    guests.forEach(function (g) {
+      var parts = g.key.split(' ');
+      var ok = words.every(function (w) {
+        return parts.some(function (p) { return p.indexOf(w) === 0; }) || g.key.indexOf(w) > -1;
+      });
+      if (!ok) return;
+      var score = g.key === t ? 0 : g.key.indexOf(t) === 0 ? 1 : parts.some(function (p) { return p.indexOf(words[0]) === 0; }) ? 2 : 3;
+      scored.push({ g: g, s: score });
+    });
+    scored.sort(function (a, b) { return a.s - b.s || a.g.name.localeCompare(b.g.name); });
+    return scored.map(function (x) { return x.g; });
+  }
+
+  function esc(s) { return s.replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+
+  function highlight(name, term) {
+    // bold the matched starts of each word
+    var words = norm(term).split(' ').filter(Boolean);
+    return name.split(' ').map(function (part) {
+      var n = norm(part);
+      for (var i = 0; i < words.length; i++) {
+        if (words[i] && n.indexOf(words[i]) === 0) {
+          var len = Math.min(part.length, words[i].length);
+          return '<mark>' + esc(part.slice(0, len)) + '</mark>' + esc(part.slice(len));
+        }
+      }
+      return esc(part);
+    }).join(' ');
+  }
+
+  function hasTable(g) { return !!(g.table || g.tableName); }
+  function tableLabel(g) {
+    if (g.table) return /^\d+$/.test(g.table) ? 'Table ' + g.table : g.table;
+    return g.tableName || 'Coming soon';
+  }
+
+  function render() {
+    var term = q.value;
+    clearBtn.hidden = !term;
+    searchBar.hidden = false;
+    if (norm(term).length < 2) { out.innerHTML = ''; return; }
+    var res = search(term);
+    if (!res.length) {
+      out.innerHTML = '<p class="msg">We couldn’t find <strong>' + esc(term) + '</strong>.<br>Try just your first name or surname &mdash; or find one of the wedding party and we’ll point you the right way.</p>';
+      return;
+    }
+    out.innerHTML = '<ul class="results">' + res.slice(0, 30).map(function (g, i) {
+      return '<li><button class="result" data-i="' + guests.indexOf(g) + '"><span class="nm">' + highlight(g.name, term) +
+        '</span><span class="tb">' + esc(tableLabel(g)) + '</span></button></li>';
+    }).join('') + '</ul>';
+  }
+
+  function heartSVG() {
+    // 7×6 pixel heart, same grid as the website icon
+    var rows = ['.XX.XX.', 'XXXXXXX', 'XXXXXXX', '.XXXXX.', '..XXX..', '...X...'], d = '';
+    rows.forEach(function (r, y) { for (var x = 0; x < 7; x++) if (r[x] === 'X') d += 'M' + x + ' ' + y + 'h1.02v1.02h-1.02z'; });
+    return '<svg viewBox="0 0 7 6" shape-rendering="crispEdges" aria-hidden="true"><path fill="#ff4f3b" d="' + d + '"/></svg>';
+  }
+
+  function show(g) {
+    var isNum = /^\d+$/.test(g.table);
+    var inner, extra = '';
+    if (!hasTable(g)) {
+      inner = '<small>Your table is</small><span class="long soon">coming soon</span>';
+      extra = '<p class="tname">We’re putting the finishing touches on the seating plan. Check back closer to the day!</p>';
+    } else if (g.table) {
+      inner = '<small>Table</small><span' + (isNum && g.table.length < 4 ? '' : ' class="long"') + '>' + esc(g.table) + '</span>';
+      if (g.tableName) extra = '<p class="tname">' + esc(g.tableName) + '</p>';
+    } else {
+      inner = '<small>You’re at</small><span class="long">' + esc(g.tableName) + '</span>';
+    }
+    var mates = hasTable(g) ? guests.filter(function (x) { return x.tid === g.tid && x !== g; }).map(function (x) { return esc(x.name); }) : [];
+    searchBar.hidden = true;
+    out.innerHTML =
+      '<div class="card">' +
+        '<p class="hello">Hello,</p>' +
+        '<p class="guest">' + esc(g.name) + '</p>' +
+        '<div class="heart" role="img" aria-label="' + esc(hasTable(g) ? 'You are at ' + tableLabel(g) + (g.table && g.tableName ? ', ' + g.tableName : '') : 'Your table is coming soon') + '">' + heartSVG() +
+          '<div class="label">' + inner + '</div>' +
+        '</div>' + extra +
+        (mates.length ? '<div class="mates"><h2>Sharing your table</h2><p>' + mates.join(' · ') + '</p></div>' : '') +
+        '<button class="back" type="button" id="back">← Search again</button>' +
+      '</div>';
+    document.getElementById('back').onclick = function () { q.value = ''; render(); q.focus(); };
+    window.scrollTo(0, 0);
+  }
+
+  out.addEventListener('click', function (e) {
+    var b = e.target.closest('.result');
+    if (b) show(guests[+b.dataset.i]);
+  });
+  q.addEventListener('input', render);
+  q.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { var r = search(q.value); if (r.length === 1) { q.blur(); show(r[0]); } else q.blur(); }
+  });
+  clearBtn.onclick = function () { q.value = ''; render(); q.focus(); };
+
+  // Prefer guests.csv next to this page (easy to update); fall back to the copy embedded above.
+  function start(text) { guests = load(text); render(); }
+  var embedded = document.getElementById('guestData').textContent.trim();
+  if (location.protocol.indexOf('http') === 0) {
+    fetch('guests.csv?v=' + Date.now(), { cache: 'no-store' })
+      .then(function (r) { if (!r.ok) throw 0; return r.text(); })
+      .then(function (t) { if (!/^\s*</.test(t) && t.trim()) start(t); else start(embedded); })
+      .catch(function () { start(embedded); });
+  } else start(embedded);
+})();
+</script>
+</body>
+</html>
